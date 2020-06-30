@@ -1,4 +1,4 @@
-@import 'antd/dist/antd.css';
+@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro&display=swap');
 
 .site-layout-content {
   background: #fff;
@@ -9,4 +9,75 @@
 .cipher-genre {
   font-weight: 'bold';
   font-size: 100px;
+}
+
+.ant-layout-header {
+  background-color: #c94c4c;
+  color: white;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 30px;
+  padding-right: 30px;
+}
+
+.ant-layout-header .ant-menu {
+  background-color: inherit;
+}
+
+.ant-dropdown-trigger {
+  height: 100%;
+}
+
+.ant-dropdown-open {
+  color:#1890ff;
+}
+
+.ant-layout-content {
+  background-color: #e5e6e4;
+  padding: 10px 40px 40px;
+  font-family: 'Anonymous Pro', monospace;
+  font-size: 20px;
+}
+
+.ant-btn {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.dropdown-button {
+  background-color: #c94c4c;
+  color: white;
+  border: none;
+}
+
+.dropdown-button:hover {
+  background-color: inherit;
+  color: inherit;
+}
+
+
+.anticon {
+  color: #1890ff;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.ant-breadcrumb {
+  padding: 0 0 10px 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* .site-layout-content {
+  padding: 20px;
+  color: hotpink;
+} */
+
+.main-content {
+  padding: 20px 20px 320px;
+  background-color: white;
+}
+
+.CC-content {
+  color:#505050;
 }

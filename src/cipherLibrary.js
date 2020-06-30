@@ -70,7 +70,7 @@ export default {
         let encrypted = [];
         let rows = countCipherRows(msg, key.length);
         let order = this.keyOrder(key);
-        console.log(key);
+        // console.log(key);
         for (let i = 0; i < order.length; ++i) {
             let msgWalker = order[i];
             // console.log(msgWalker);
