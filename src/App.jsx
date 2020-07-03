@@ -71,7 +71,6 @@ class App extends React.Component {
           <CipherPage keyType="public" cipherType="dsa"></CipherPage>
         </Route>
 
-
         <Footer style={{ textAlign: "center" }}> Winnie Jeng {year} </Footer>
       </Layout>
     );
