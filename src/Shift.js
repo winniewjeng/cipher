@@ -4,50 +4,29 @@ import { Input, Button, Tooltip, Row, Col } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
+const possibleChars =
+  "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-function checkStringUniqueness(str) {
-  let set = new Set();
-  for (let i = 0; i < str.length; ++i) {
-    if (set.has(str[i])) {
-      return false;
-    }
-    set.add(str[i]);
-  }
-  return true;
-}
-
-function checkStringCharBound(str) {
-  const possibleKeyChars =
-    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  for (let i = 0; i < str.length; ++i) {
-    if (!possibleKeyChars.includes(str[i])) {
-      return false;
-    }
-  }
-  return true;
-}
-
-class CC extends React.Component {
+class Shift extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       key: "",
       msg: "",
       encrypted: "",
+      decrypted: "",
     };
   }
 
   handleUserKeyInput = (e) => {
     const str = e.target.value;
-    // check if e.target.value has dup char and if e.target.value is within valid bound
-    // then update this.setState. If reqs aren't met, then don't update key
-    if (checkStringUniqueness(str) && checkStringCharBound(str)) {
+    if (Number(str)) {
       this.setState({ key: str });
     }
   };
 
   handleKeyGeneration = () => {
-    const key = Library.generateAlphaNumericKey(5, 10);
+    const key = Library.generateNumberKey(3);
     this.setState((state) => {
       return { key: key };
     });
@@ -55,25 +34,46 @@ class CC extends React.Component {
 
   handleUserMessage = (v) => {
     const msg = v.target.value;
-    // setState msg
     this.setState({ msg: msg });
-    this.setState({ encrypted: Library.encrypt(msg, this.state.key) });
+    this.setState({ encrypted: this.encrypt(msg, this.state.key) });
   };
 
+  // can't handle regex
+  encrypt(msg, key) {
+    key %= possibleChars.length;
+    return msg
+      .split("")
+      .map((x) => {
+        if (possibleChars.search(x) === -1) {
+          return x;
+        } else if (possibleChars[possibleChars.search(x) + key]) {
+          return possibleChars[possibleChars.search(x) + key];
+        } else if (possibleChars.search(x) + key >= 0) {
+          return possibleChars[
+            key - (possibleChars.length - possibleChars.search(x))
+          ];
+        }
+        // decryption case:
+        return possibleChars[
+          key + (possibleChars.length - possibleChars.search(x))
+        ];
+      })
+      .join("");
+  }
+
+  decrypt(msg, key) {
+    return this.encrypt(msg, -key);
+  }
+
   render() {
-    // console.log(window.location);
-    // const url = "www.google.com";
-    const encrypted = Library.encrypt(this.state.msg, this.state.key);
-    const decrypted = Library.decrypt(this.state.encrypted, this.state.key);
+    const encrypted = this.encrypt(this.state.msg, this.state.key);
+    const decrypted = this.decrypt(this.state.encrypted, this.state.key);
 
     return (
-      <div className="CC-content">
+      <div className="shift-cipher-content">
         <Row>
           Key
-          <Tooltip
-            placement="topLeft"
-            title="key must be a unique combination of alphanumeric characters"
-          >
+          <Tooltip placement="topLeft" title="key must be a positive integer">
             <InfoCircleOutlined />
           </Tooltip>
         </Row>
@@ -94,7 +94,11 @@ class CC extends React.Component {
             </Button>
           </Col>
           <Col flex={"0 1 0"}>
-            <Button onClick={() => this.setState({ msg: "", encrypted: "" })}>
+            <Button
+              onClick={() =>
+                this.setState({ msg: "", encrypted: "", decrypted: "" })
+              }
+            >
               Clear Message
             </Button>
           </Col>
@@ -105,7 +109,6 @@ class CC extends React.Component {
             rows={2}
             placeholder="message"
             value={this.state.msg}
-            // value={this.state.msg ? this.state.msg : ""}
             onChange={(e) => this.handleUserMessage(e)}
           />
         </Row>
@@ -129,4 +132,5 @@ class CC extends React.Component {
     );
   }
 }
-export default CC;
+
+export default Shift;
